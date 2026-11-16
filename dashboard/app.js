@@ -172,16 +172,19 @@
   '<tr><td><strong>All live-token protocols (fallback)</strong></td><td class="num">—</td><td class="num"><strong>' + mult(D.global_multiple) + '</strong></td></tr>';
 
   // ---- tabs + hash ---------------------------------------------------------
-  function showTab(tab) {
-    state.tab = tab;
+  function paintTabs() {
     document.querySelectorAll('.tabs button').forEach(function (b) {
-      var on = b.getAttribute('data-tab') === tab;
+      var on = b.getAttribute('data-tab') === state.tab;
       b.classList.toggle('active', on);
       if (on) b.setAttribute('aria-current', 'page'); else b.removeAttribute('aria-current');
     });
-    $('view-board').hidden = tab !== 'board';
-    $('view-live').hidden = tab !== 'live';
-    $('view-model').hidden = tab !== 'model';
+    $('view-board').hidden = state.tab !== 'board';
+    $('view-live').hidden = state.tab !== 'live';
+    $('view-model').hidden = state.tab !== 'model';
+  }
+  function showTab(tab) {
+    state.tab = tab;
+    paintTabs();
     setHash();
   }
   document.querySelectorAll('.tabs button').forEach(function (b) {
@@ -194,20 +197,32 @@
     if (state.selected) parts.push('detail=' + encodeURIComponent(state.selected));
     history.replaceState(null, '', parts.length ? '#' + parts.join('&') : '#');
   }
-  function readHash() {
+  // Apply the hash as state: a fresh load, a link, or a back/forward step. A hash change
+  // re-renders instead of reloading, so the same page can show each view in turn.
+  function applyHash() {
     var h = location.hash.replace(/^#/, '');
-    if (!h) return;
-    h.split('&').forEach(function (part) {
+    var tab = 'board', q = '', detail = null;
+    if (h) h.split('&').forEach(function (part) {
       var kv = part.split('=');
       var k = kv[0], v = decodeURIComponent(kv[1] || '');
-      if (k === 'tab' && (v === 'live' || v === 'model' || v === 'board')) showTab(v);
-      if (k === 'q') { state.q = v; $('q').value = v; }
-      if (k === 'detail') state.selected = v;
+      if (k === 'tab' && (v === 'live' || v === 'model' || v === 'board')) tab = v;
+      if (k === 'q') q = v;
+      if (k === 'detail') detail = v;
     });
+    state.tab = tab;
+    paintTabs();
+    state.q = q;
+    $('q').value = q;
+    if (detail) { state.selected = detail; openDetail(detail); return; }
+    if (state.selected) {
+      state.selected = null;
+      $('detail').hidden = true;
+      $('detail').innerHTML = '';
+    }
+    renderBoard();
   }
+  window.addEventListener('hashchange', applyHash);
 
-  readHash();
-  renderBoard();
-  if (state.selected) openDetail(state.selected);
+  applyHash();
   document.querySelector('main').setAttribute('aria-busy', 'false');
 })();
