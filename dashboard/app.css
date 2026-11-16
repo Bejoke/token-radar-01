@@ -47,8 +47,16 @@ main { padding: 18px 0 8px; }
 .controls .check { flex-direction: row; align-items: center; gap: 6px; padding-bottom: 8px; text-transform: none; letter-spacing: 0; font-size: 14px; color: var(--text); }
 .count { color: var(--muted); margin: 0 0 10px; }
 .tablewrap { overflow-x: auto; border: 1px solid var(--line); border-radius: var(--radius); background: var(--panel2); }
-table { border-collapse: collapse; width: 100%; font-variant-numeric: tabular-nums; }
-th, td { padding: 9px 12px; text-align: left; border-bottom: 1px solid var(--line); white-space: nowrap; }
+table { border-collapse: collapse; width: 100%; font-variant-numeric: tabular-nums; table-layout: fixed; font-size: 14px; }
+#board th:nth-child(1), #board td:nth-child(1) { width: 46px; }
+#board th:nth-child(2), #board td:nth-child(2) { width: 22%; white-space: normal; }
+#board th:nth-child(3), #board td:nth-child(3) { width: 16%; white-space: normal; }
+#board th:nth-child(4), #board td:nth-child(4) { width: 9%; }
+#board th:nth-child(5), #board td:nth-child(5) { width: 14%; }
+#board th:nth-child(6), #board td:nth-child(6) { width: 7%; }
+#board th:nth-child(7), #board td:nth-child(7) { width: 7%; }
+#board th:nth-child(8), #board td:nth-child(8) { width: 14%; }
+th, td { padding: 8px 10px; text-align: left; border-bottom: 1px solid var(--line); white-space: nowrap; }
 tbody tr:last-child td { border-bottom: 0; }
 thead th { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: .06em; background: var(--panel); position: sticky; top: 0; }
 thead th[data-sort] { cursor: pointer; }

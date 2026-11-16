@@ -83,7 +83,7 @@
         '<td class="num">' + r.rank + '</td>' +
         '<td>' + esc(r.name) + (watchlist[r.slug] ? '<span class="badge">watchlist</span>' : '') + '<span class="sub">' + esc(r.slug) + '</span></td>' +
         '<td>' + esc(r.category || '—') + '</td>' +
-        '<td>' + esc(r.chains.slice(0, 3).join(', ')) + (r.chains.length > 3 ? ' +' + (r.chains.length - 3) : '') + '</td>' +
+        '<td>' + esc(r.chains[0] || '—') + (r.chains.length > 1 ? ' +' + (r.chains.length - 1) : '') + '</td>' +
         '<td class="num">' + money(r.tvl_usd) + '</td>' +
         '<td class="num ' + g + '">' + pct(r.change_7d) + '</td>' +
         '<td class="num">' + age(r.age_days) + '</td>' +
@@ -132,7 +132,7 @@
       '<h3>Why it is worth ' + money(r.implied_value_usd) + '</h3>' +
       '<table><thead><tr><th>Step</th><th class="num">Figure</th><th class="num">Multiplier</th></tr></thead><tbody>' +
       '<tr><td>TVL</td><td class="num">' + money(r.tvl_usd) + '</td><td class="num">—</td></tr>' +
-      '<tr><td>Category multiple (' + esc(r.category || 'Uncategorised') + ', ' + r.category_peers + ' live peers)</td><td class="num">' + money(Math.round(base)) + '</td><td class="num">' + mult(r.category_multiple) + '</td></tr>' +
+      '<tr><td>Category multiple (' + esc(r.category || 'Uncategorised') + ', ' + r.category_peers + (r.category_peers === 1 ? ' live peer' : ' live peers') + ')</td><td class="num">' + money(Math.round(base)) + '</td><td class="num">' + mult(r.category_multiple) + '</td></tr>' +
       '<tr><td>7-day growth ' + pct(r.change_7d) + '</td><td class="num">—</td><td class="num">' + mult(r.growth_multiplier) + '</td></tr>' +
       '<tr><td>Maturity (' + age(r.age_days) + ' with no token)</td><td class="num">—</td><td class="num">' + mult(r.maturity_multiplier) + '</td></tr>' +
       '<tr><td>Chains (' + r.chains.length + ')</td><td class="num">—</td><td class="num">' + mult(r.chain_multiplier) + '</td></tr>' +
